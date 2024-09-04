@@ -3,18 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
-use Illuminate\Http\Request;
 use App\Http\Requests\DoctorRequest;
+use App\Enums\Specialty;
 
 class DoctorController extends Controller
 {
 
-    // Направление докторов
-    const SPECIALITY = [
-        'Хирург',
-        'Терапевт',
-        'ЛОР'
-    ];
 
     /**
      * Display a listing of the resource.
@@ -30,7 +24,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create_or_edit', ['specialties' => self::SPECIALITY]);
+        return view('doctors.create_or_edit', ['specialties' => Specialty::toSelectArray()]);
     }
 
     /**
@@ -58,7 +52,7 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
-        return view('doctors.create_or_edit', ['doctor' => $doctor, 'specialties' => self::SPECIALITY]);
+        return view('doctors.create_or_edit', ['doctor' => $doctor, 'specialties' => Specialty::toSelectArray()]);
     }
 
     /**

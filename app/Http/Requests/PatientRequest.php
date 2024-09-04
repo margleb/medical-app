@@ -23,6 +23,7 @@ class PatientRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:10',
+            'age' => 'required',
             'doctor_id' => 'required|exists:doctors,id', // Проверка на существование врача
         ];
     }

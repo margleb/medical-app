@@ -2,17 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Specialty;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DoctorRequest extends FormRequest
 {
 
-    // Направление докторов
-    const SPECIALITY = [
-        'Хирург',
-        'Терапевт',
-        'ЛОР'
-    ];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +26,7 @@ class DoctorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:10',
-            'specialty' => 'required|in:' . implode(',', self::SPECIALITY),
+            'specialty' => 'required|in:' . implode(',', Specialty::toSelectArray()),
         ];
     }
 
