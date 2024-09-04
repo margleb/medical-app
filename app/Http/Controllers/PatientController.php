@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatientRequest;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -30,14 +31,9 @@ class PatientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PatientRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0',
-            'doctor_id' => 'required|exists:doctors,id',
-        ]);
-
+        $validated = $request->validated();
         Patient::create($validated);
 
         return redirect()->route('patients.index')->with('success', 'Пациент успешно добавлен');
@@ -57,20 +53,15 @@ class PatientController extends Controller
     public function edit(Patient $patient)
     {
         $doctors = Doctor::all();
-        return view('patients.create_or_edit', compact('patient', 'doctors'));
+        return view('patients.edit', compact('patient', 'doctors'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Patient $patient)
+    public function update(PatientRequest $request, Patient $patient)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0',
-            'doctor_id' => 'required|exists:doctors,id',
-        ]);
-
+        $validated = $request->validated();
         $patient->update($validated);
 
         return redirect()->route('patients.index')->with('success', 'Пациент успешно обновлен');

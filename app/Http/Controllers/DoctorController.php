@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use App\Http\Requests\DoctorRequest;
 
 class DoctorController extends Controller
 {
+
+    // Направление докторов
+    const SPECIALITY = [
+        'Хирург',
+        'Терапевт',
+        'ЛОР'
+    ];
+
     /**
      * Display a listing of the resource.
      */
@@ -21,19 +30,15 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create_or_edit');
+        return view('doctors.create_or_edit', ['specialties' => self::SPECIALITY]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DoctorRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'specialty' => 'required|string|max:255',
-        ]);
-
+        $validated = $request->validated();
         Doctor::create($validated);
 
         return redirect()->route('doctors.index')->with('success', 'Вы успешно добавили доктора');
@@ -45,8 +50,7 @@ class DoctorController extends Controller
 
     public function show(Doctor $doctor)
     {
-        $patients = $doctor->patients;
-        return view('doctors.show', compact('doctor', 'patients'));
+        return view('doctors.show', ['doctor' => $doctor, 'patients' => $doctor->patients]);
     }
 
     /**
@@ -54,19 +58,16 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
-        return view('doctors.create_or_edit', compact('doctor'));
+        return view('doctors.create_or_edit', ['doctor' => $doctor, 'specialties' => self::SPECIALITY]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(DoctorRequest $request, Doctor $doctor)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'specialty' => 'required|string|max:255',
-        ]);
 
+        $validated = $request->validated();
         $doctor->update($validated);
 
         return redirect()->route('doctors.index')->with('success', 'Доктор успешно обновлен');

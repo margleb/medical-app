@@ -8,6 +8,16 @@
 <body>
 <h1>{{ isset($patient) ? 'Редактировать пациента' : 'Добавить пациента' }}</h1>
 
+@if ($errors->any())
+    <div>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li style="color:red;">{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form action="{{ isset($patient) ? route('patients.update', $patient) : route('patients.store') }}" method="POST">
     @csrf
     @if(isset($patient))
